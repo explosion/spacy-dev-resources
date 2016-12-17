@@ -1,2 +1,5 @@
-# spacy-dev-resources
-💫  Scripts, tools and resources for developing spaCy
+<a href="https://explosion.ai"><img src="https://explosion.ai/assets/img/logo.svg" width="125" height="125" align="right" /></a>
+
+# spaCy Developer Resources
+
+This repository contains scripts, tools and resources for developing [spaCy](https://github.com/explosion/spaCy), adding new languages and training new models.
