@@ -8,8 +8,10 @@ This repository contains scripts, tools and resources for developing [spaCy](htt
 
 | Directory | Description |
 | --- | --- |
-| [`templates`](templates) | template files for adding spaCy extensions (like new languages) |
-| [`training`](training) | scripts for producing spaCy models |
+| [`corpus-utils`](corpus-utils) | Scripts used to transform treebanks. *Work in progress*. |
+| [`fabfile`](fabfile) | Utility commands to be used with [Fabric](http://www.fabfile.org). |
+| [`templates`](templates) | Template files for adding spaCy extensions, like new languages. |
+| [`training`](training) | Scripts for producing spaCy models. |
 
 ## Contributing to spaCy
 

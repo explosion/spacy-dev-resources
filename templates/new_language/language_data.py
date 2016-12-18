@@ -1,68 +1,30 @@
 # encoding: utf8
 from __future__ import unicode_literals
 
-from ..symbols import *
-from ..language_data import PRON_LEMMA
-from ..language_data import TOKENIZER_PREFIXES
-from ..language_data import TOKENIZER_SUFFIXES
-from ..language_data import TOKENIZER_INFIXES
+
+# import base language data
+from .. import language_data as base
 
 
-TAG_MAP = {
-    "ADV":      {POS: ADV},
-    "NOUN":     {POS: NOUN},
-    "ADP":      {POS: ADP},
-    "PRON":     {POS: PRON},
-    "SCONJ":    {POS: SCONJ},
-    "PROPN":    {POS: PROPN},
-    "DET":      {POS: DET},
-    "SYM":      {POS: SYM},
-    "INTJ":     {POS: INTJ},
-    "PUNCT":    {POS: PUNCT},
-    "NUM":      {POS: NUM},
-    "AUX":      {POS: AUX},
-    "X":        {POS: X},
-    "CONJ":     {POS: CONJ},
-    "ADJ":      {POS: ADJ},
-    "VERB":     {POS: VERB}
-}
+# import util functions
+from ..language_data import update_exc, strings_to_exc
 
 
-STOP_WORDS = set("""
-
-""".split())
-
-
-TOKENIZER_EXCEPTIONS = {
-
-}
+# import language-specific data from files
+from .tag_map import TAG_MAP
+from .stop_words import STOP_WORDS
+from .tokenizer_exceptions import TOKENIZER_EXCEPTIONS, ORTH_ONLY
 
 
-ORTH_ONLY = [
-    "a.",
-    "b.",
-    "c.",
-    "d.",
-    "e.",
-    "f.",
-    "g.",
-    "h.",
-    "i.",
-    "j.",
-    "k.",
-    "l.",
-    "m.",
-    "n.",
-    "o.",
-    "p.",
-    "q.",
-    "r.",
-    "s.",
-    "t.",
-    "u.",
-    "v.",
-    "w.",
-    "x.",
-    "y.",
-    "z."
-]
+TOKENIZER_EXCEPTIONS = dict(TOKENIZER_EXCEPTIONS)
+TAG_MAP = dict(TAG_MAP)
+STOP_WORDS = set(STOP_WORDS)
+
+
+# customize tokenizer exceptions
+update_exc(TOKENIZER_EXCEPTIONS, strings_to_exc(ORTH_ONLY))
+update_exc(TOKENIZER_EXCEPTIONS, strings_to_exc(base.EMOTICONS))
+
+
+# export
+__all__ = ["TOKENIZER_EXCEPTIONS", "TAG_MAP", "STOP_WORDS"]
