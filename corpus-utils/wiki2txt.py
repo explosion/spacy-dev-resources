@@ -6,6 +6,7 @@ from os.path import join
 import plac
 import spacy
 from textacy.corpora.wiki_reader import WikiReader, strip_markup
+from tqdm import tqdm
 
 SENT_ENDS = [u".", u"!", u"?"]
 
@@ -33,15 +34,6 @@ def clean_text(txt, min_char_ratio=0.9, min_length=50):
                 yield line
 
 
-def main(dump_path, out_dir, lang, cleaned=True):
-    reader = WikiReader(dump_path)
-    nlp = spacy.load(lang)
-    for id, title, content in reader:
-        text_content = extract_text(content, nlp, cleaned)
-        if text_content:
-            write_file(id, out_dir, text_content, title)
-
-
 def extract_text(content, nlp, cleaned):
     text_content = strip_markup(content)
     if cleaned:
@@ -56,6 +48,15 @@ def write_file(id, out_dir, text_content, title):
     with codecs.open(fpath, "w", encoding="utf8") as f:
         content = title + u"\n" + text_content
         f.write(content)
+
+
+def main(dump_path, out_dir, lang, cleaned=True):
+    reader = WikiReader(dump_path)
+    nlp = spacy.load(lang)
+    for id, title, content in tqdm(reader):
+        text_content = extract_text(content, nlp, cleaned)
+        if text_content:
+            write_file(id, out_dir, text_content, title)
 
 
 if __name__ == "__main__":

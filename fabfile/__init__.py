@@ -1,18 +1,22 @@
 from __future__ import print_function
 
-from fabric.api import local, lcd, env, settings, prefix
-from os.path import exists as file_exists
-from fabtools.python import virtualenv
-from os import path
 import os
 import shutil
+from os import path
+from os.path import exists as file_exists
+
+from fabric.api import local, lcd, prefix
+from fabric.decorators import task
+from fabtools.python import virtualenv
 from pathlib import Path
 
+import corpus
+import corpus.wikipedia
 
 PWD = path.dirname(__file__)
 VENV_DIR = path.join(PWD, '.env')
 
-
+@task
 def counts():
     pass
     # Tokenize the corpus
@@ -39,6 +43,7 @@ def counts():
 # py3: install from sdist, test --slow, download data, test --models --vectors
 
 
+@task
 def prebuild(build_dir='/tmp/build_spacy'):
     if file_exists(build_dir):
         shutil.rmtree(build_dir)
@@ -60,6 +65,7 @@ def prebuild(build_dir='/tmp/build_spacy'):
             local('PYTHONPATH=`pwd` py.test --models spacy/tests/')
 
 
+@task
 def web():
     def jade(source_name, out_dir):
         pwd = path.join(path.dirname(__file__), 'website')
@@ -78,11 +84,12 @@ def web():
     for collection in ('blog', 'tutorials'):
         for post_dir in (Path(__file__).parent / 'website' / 'src' / 'jade' / collection).iterdir():
             if post_dir.is_dir() \
-            and (post_dir / 'index.jade').exists() \
-            and (post_dir / 'meta.jade').exists():
+                    and (post_dir / 'index.jade').exists() \
+                    and (post_dir / 'meta.jade').exists():
                 jade(str(post_dir / 'index.jade'), path.join(collection, post_dir.parts[-1]))
 
 
+@task
 def web_publish(assets_path):
     from boto.s3.connection import S3Connection, OrdinaryCallingFormat
 
@@ -131,6 +138,7 @@ def web_publish(assets_path):
     local('aws s3 sync --delete %s s3://spacy.io/resources' % assets_path)
 
 
+@task
 def publish(version):
     with virtualenv(VENV_DIR):
         local('git push origin master')
@@ -141,12 +149,14 @@ def publish(version):
         local('twine upload dist/spacy-%s.tar.gz' % version)
 
 
+@task
 def env(lang="python2.7"):
     if file_exists('.env'):
         local('rm -rf .env')
     local('virtualenv -p %s .env' % lang)
 
 
+@task
 def install():
     with virtualenv(VENV_DIR):
         local('pip install --upgrade setuptools')
@@ -154,6 +164,7 @@ def install():
         local('pip install pytest')
 
 
+@task
 def make():
     with virtualenv(VENV_DIR):
         with lcd(path.dirname(__file__)):
@@ -163,17 +174,20 @@ def make():
             local('python setup.py build_ext --inplace')
 
 
+@task
 def clean():
     with lcd(path.dirname(__file__)):
         local('python setup.py clean --all')
 
 
+@task
 def test():
     with virtualenv(VENV_DIR):
         with lcd(path.dirname(__file__)):
             local('py.test -x spacy/tests')
 
 
+@task
 def train(json_dir=None, dev_loc=None, model_dir=None):
     if json_dir is None:
         json_dir = 'corpora/en/json'
@@ -185,17 +199,21 @@ def train(json_dir=None, dev_loc=None, model_dir=None):
             local('python bin/parser/train.py -p en %s/train/ %s/development %s' % (json_dir, json_dir, model_dir))
 
 
+@task
 def travis():
     local('open https://travis-ci.org/honnibal/thinc')
 
 
+@task
 def pos():
     with virtualenv(VENV_DIR):
-        local('python tools/train.py ~/work_data/docparse/wsj02-21.conll ~/work_data/docparse/wsj22.conll spacy/en/data')
+        local(
+            'python tools/train.py ~/work_data/docparse/wsj02-21.conll ~/work_data/docparse/wsj22.conll spacy/en/data')
         local('python tools/tag.py ~/work_data/docparse/wsj22.raw /tmp/tmp')
         local('python tools/eval_pos.py ~/work_data/docparse/wsj22.conll /tmp/tmp')
 
 
+@task
 def ner():
     local('rm -rf data/en/ner')
     local('python tools/train_ner.py ~/work_data/docparse/wsj02-21.conll data/en/ner')
@@ -203,6 +221,7 @@ def ner():
     local('python tools/eval_ner.py ~/work_data/docparse/wsj22.conll /tmp/tmp | tail')
 
 
+@task
 def conll():
     local('rm -rf data/en/ner')
     local('python tools/conll03_train.py ~/work_data/ner/conll2003/eng.train data/en/ner/')
