@@ -1,0 +1,4 @@
+falcon
+spacy
+pytest
+gunicorn
