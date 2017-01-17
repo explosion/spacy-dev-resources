@@ -2,7 +2,7 @@
 
 # spaCy Developer Resources
 
-This repository contains scripts, tools and resources for developing [spaCy](https://github.com/explosion/spaCy), adding new languages and training new models.
+This repository is a collection of community resources and contains scripts, tools and helpers for developing [spaCy](https://github.com/explosion/spaCy), adding new languages and training new models. Feel free to submit a [pull request](https://github.com/explosion/spacy-dev-resources/pulls) to contribute.
 
 ## Table of contents
 
