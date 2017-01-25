@@ -2,23 +2,35 @@ from os.path import join, dirname
 
 from fabric.api import lcd, local
 from fabric.decorators import task
-from fabtools.python import virtualenv
 
 import wikipedia
+from .utils import optional_venv
 
 SCRIPTS_DIR = "./scripts"
 BROWN_DIR = SCRIPTS_DIR + "/" + "brown"
 CORPUS_DIR = "./data/corpora/{lang}"
 MODEL_DIR = "./data/model/{lang}"
 
-CORPUS_VENV = ".corpus_venv"
+
+@task
+def clean_corpora(language):
+    local("rm -rf {}".format(CORPUS_DIR.format(lang=language)))
 
 
 @task
-def env(env_dir=CORPUS_VENV):
-    local("virtualenv {}".format(env_dir))
-    with virtualenv(env_dir, local=True):
-        local("pip install textacy==0.3.2 plac==0.9.6 spacy==1.6 gensim>=0.13.4 tqdm")
+def clean_models(language):
+    local("rm -rf {}".format(MODEL_DIR.format(lang=language)))
+
+
+@task
+def clean_data(language):
+    clean_corpora(language)
+    clean_models(language)
+
+
+@task
+def clean():
+    clean_data("")
 
 
 @task
@@ -30,12 +42,16 @@ def build_brown(path=BROWN_DIR):
 
 
 @task
-def make_wiki_hu():
-    make_wiki(CORPUS_VENV, "hu")
+def env(env_dir=None):
+    if env_dir is not None:
+        local("virtualenv {}".format(env_dir))
+    with optional_venv(env_dir, local=True):
+        local("pip install textacy==0.3.2 plac==0.9.6 spacy==1.6 gensim==0.13.4 tqdm")
+    build_brown()
 
 
 @task
-def make_wiki(env, language):
+def wiki_model(language, env=None):
     corpus_dir = CORPUS_DIR.format(lang=language)
     out_file = "{}_wiki.xml.bz2".format(language)
     dump_path = join(corpus_dir, out_file)

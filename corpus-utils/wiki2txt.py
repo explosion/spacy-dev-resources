@@ -52,7 +52,7 @@ def write_file(id, out_dir, text_content, title):
 
 def main(dump_path, out_dir, lang, cleaned=True):
     reader = WikiReader(dump_path)
-    nlp = spacy.load(lang)
+    nlp = spacy.load(lang, parser=None, tagger=None)
     for id, title, content in tqdm(reader):
         text_content = extract_text(content, nlp, cleaned)
         if text_content:
