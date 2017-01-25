@@ -12,9 +12,10 @@ SENT_ENDS = [u".", u"!", u"?"]
 
 
 def tokenize_sentence_split(text, nlp):
+    tokenizer = nlp.tokenizer
     for line in text.split("\n"):
         tok_acc = []
-        for tok in nlp(line):
+        for tok in tokenizer(line):
             tok_acc.append(tok.text)
             if tok.text in SENT_ENDS:
                 yield " ".join(tok_acc)
