@@ -58,11 +58,15 @@ def wiki_model(language, env=None):
     wiki_corpus_path = join(corpus_dir, "{}_wiki.corpus".format(language))
     wiki_pages_dir = join(corpus_dir, "wiki")
     model_dir = MODEL_DIR.format(lang=language)
+
+    word_freq_path = join(model_dir, "{}_wiki.freqs".format(language))
     word2vec_model_path = join(model_dir, "{}_wiki.word2vec".format(language))
     brown_out_dir = join(model_dir, "brown")
 
     wikipedia.download(corpus_dir, out_file, language)
     wikipedia.extract(env, dump_path, wiki_pages_dir, wiki_corpus_path, language)
+
+    word_counts(wiki_corpus_path + "/*", word_freq_path)
     word2vec(wiki_corpus_path, word2vec_model_path)
     brown_clusters(wiki_corpus_path, brown_out_dir)
 
@@ -78,6 +82,11 @@ def word2vec(corpus_path, out_path, dim=300, threads=4):
             threads=threads
         )
     )
+
+
+@task
+def word_counts(input_glob, out_path):
+    local("python training/plain_word_freqs.py {inp_glob} {out}".format(input_glob=input_glob, out=out_path))
 
 
 @task
