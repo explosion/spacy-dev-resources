@@ -5,6 +5,7 @@ from __future__ import print_function
 import falcon
 import spacy
 import json
+import sys
 
 from spacy.pipeline import EntityRecognizer
 
@@ -12,7 +13,7 @@ import spacy.util
 from spacy.tagger import Tagger
 
 from .parse import Entities, TrainEntities
-
+from falcon_cors import CORS
 
 try:
     unicode
@@ -21,7 +22,6 @@ except NameError:
 
 
 _models = {}
-
 
 def get_model(model_name):
     if model_name not in _models:
@@ -38,10 +38,11 @@ def get_model(model_name):
     return _models[model_name]
 
 
-def update_vocabulary(model, text):
-    doc = model.make_doc(text)
-    for word in doc:
-        _ = model.vocab[word.orth]
+def update_vocabulary(model, texts):
+    for text in texts:
+        doc = model.make_doc(text)
+        for word in doc:
+            _ = model.vocab[word.orth]
 
 
 class EntResource(object):
@@ -49,14 +50,16 @@ class EntResource(object):
     def on_post(self, req, resp):
         req_body = req.stream.read()
         json_data = json.loads(req_body.decode('utf8'))
-        text = json_data.get('text')
+        paragraphs = json_data.get('paragraphs')
         model_name = json_data.get('model', 'en')
         try:
             model = get_model(model_name)
-            entities = Entities(model, text)
-            resp.body = json.dumps(entities.to_json(), sort_keys=True, indent=2)
-            resp.content_type = 'text/string'
-            resp.append_header('Access-Control-Allow-Origin', "*")
+            entities = []
+            for p in paragraphs:
+                e = Entities(model, p.get('text'))
+                entities.append(e.to_json())
+            resp.body = json.dumps(entities, sort_keys=True, indent=2)
+            resp.content_type = 'application/json'
             resp.status = falcon.HTTP_200
         except Exception:
             resp.status = falcon.HTTP_500
@@ -67,20 +70,24 @@ class TrainEntResource(object):
     def on_post(self, req, resp):
         req_body = req.stream.read()
         json_data = json.loads(req_body.decode('utf8'))
-        text = json_data.get('text')
-        tags = json_data.get('tags')
+        paragraphs = json_data.get('paragraphs')
         model_name = json_data.get('model', 'en')
         try:
             model = get_model(model_name)
-            update_vocabulary(model, text)
-            entities = TrainEntities(model, text, tags)
-            resp.body = json.dumps(entities.to_json(), sort_keys=True, indent=2)
-            resp.content_type = 'text/string'
-            resp.append_header('Access-Control-Allow-Origin', "*")
+            texts = [paragraph.get('text') for paragraph in paragraphs]
+            update_vocabulary(model, texts)
+            entities = []
+            for p in paragraphs:
+                e = TrainEntities(model, p.get('text'), p.get('tags'))
+                entities.append(e.to_json())
+            resp.body = json.dumps(entities, sort_keys=True, indent=2)
+            resp.content_type = 'application/json'
             resp.status = falcon.HTTP_200
         except Exception:
+            print("Unexpected error:", sys.exc_info()[0])
             resp.status = falcon.HTTP_500
 
-APP = falcon.API()
+cors = CORS(allow_all_origins=True)
+APP = falcon.API(middleware=[cors.middleware])
 APP.add_route('/ent', EntResource())
 APP.add_route('/train', TrainEntResource())
