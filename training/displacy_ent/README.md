@@ -10,6 +10,8 @@ The customized version of the service exposes two endpoints:
  * `POST /ent/` Performs named entity recognition on the text of the request
  * `POST /train/` Retrains the named entity recognizer of a model using an annotated text
 
+The server can be integrated with an annotation frontend, for example, the experimental [spaCy annotator](https://github.com/tcrossland/spacy-annotator).
+
 To run the server locally, install the dependencies and execute `python app.py`.
 
 ---
@@ -20,25 +22,43 @@ Example request:
 
 ```json
 {
-    "text": "When Sebastian Thrun started working on self-driving cars at Google in 2007, few people outside of the company took him seriously.",
-    "model": "en"
+    "model": "en",
+    "paragraphs": [
+        {
+            "text": "When Sebastian Thrun started working on self-driving cars at Google in 2007, few people outside of the company took him seriously."
+        }
+    ]
 }
 ```
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `text` | string | text to be parsed |
 | `model` | string | identifier string for a model installed on the server  |
+| `paragraphs` | array | paragraphs to be parsed |
 
 Example response:
 
 ```json
 [
-    { "end": 20, "start": 5,  "type": "PERSON" },
-    { "end": 67, "start": 61, "type": "ORG" },
-    { "end": 75, "start": 71, "type": "DATE" }
+    {
+        "tags": [
+            { "end": 20, "start": 5,  "type": "PERSON" },
+            { "end": 67, "start": 61, "type": "ORG" },
+            { "end": 75, "start": 71, "type": "DATE" }
+        ],
+        "text": "When Sebastian Thrun started working on self-driving cars at Google in 2007, few people outside of the company took him seriously."
+    }
 ]
 ```
+
+The response contains an array of paragraphs, each paragraph has the following properties:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `tags` | array | array of tags (see below) |
+| `text` | string | the text of the paragraph |
+
+Each tag has the following properties:
 
 | Name | Type | Description |
 | --- | --- | --- |
@@ -54,64 +74,95 @@ Example request:
 
 ```json
 {
-    "text": "Banco Bilbao Vizcaya Argentaria (BBVA) es una entidad bancaria española, presidida por Francisco González Rodríguez.",
-    "tags": [
-      {
-        "start": 0,
-        "len": 31,
-        "type": "ORG"
-      },
-      {
-        "start": 33,
-        "len": 4,
-        "type": "ORG"
-      },
-      {
-        "start": 63,
-        "len": 8,
-        "type": "NORP"
-      },
-      {
-        "start": 87,
-        "len": 28,
-        "type": "PERSON"
-      }
-    ]
+  "model": "en",
+  "paragraphs": [
+    {
+      "text": "Banco Bilbao Vizcaya Argentaria (BBVA) es una entidad bancaria española, presidida por Francisco González Rodríguez.",
+      "tags": [
+        {
+          "start": 0,
+          "len": 31,
+          "type": "ORG"
+        },
+        {
+          "start": 33,
+          "len": 4,
+          "type": "ORG"
+        },
+        {
+          "start": 63,
+          "len": 8,
+          "type": "NORP"
+        },
+        {
+          "start": 87,
+          "len": 28,
+          "type": "PERSON"
+        }
+        ]
+    }
+  ]
 }
 ```
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `text` | string | text to be parsed |
-| `tags` | array | entities to be used for training named entity recognition. Each tag specifies the `start` position, the length of the token (`len`), and the `type` of the tag. |
 | `model` | string | identifier string for a model installed on the server  |
+| `paragraphs` | array | paragraphs to be parsed |
+
+Each paragraph has the following properties:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `tags` | array | array of tags (see below) |
+| `text` | string | the text of the paragraph |
 
 Example response:
 
 ```json
-[
-  {
-    "end": 31,
-    "start": 0,
-    "type": "ORG"
-  },
-  {
-    "end": 37,
-    "start": 33,
-    "type": "ORG"
-  },
-  {
-    "end": 71,
-    "start": 63,
-    "type": "NORP"
-  },
-  {
-    "end": 115,
-    "start": 87,
-    "type": "PERSON"
-  }
-]
+{
+  "paragraphs": [
+    {
+      "tags": [
+        {
+          "end": 31,
+          "start": 0,
+          "type": "ORG"
+        },
+        {
+          "end": 37,
+          "start": 33,
+          "type": "ORG"
+        },
+        {
+          "end": 71,
+          "start": 63,
+          "type": "NORP"
+        },
+        {
+          "end": 115,
+          "start": 87,
+          "type": "PERSON"
+        }
+      ],
+      "text": "Banco Bilbao Vizcaya Argentaria (BBVA) es una entidad bancaria española, presidida por Francisco González Rodríguez."
+    }
+  ]
+}
 ```
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `paragraphs` | array | parse result for each paragraph |
+
+The response contains an array of paragraphs, each paragraph has the following properties:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `tags` | array | array of tags (see below) |
+| `text` | string | the text of the paragraph |
+
+Each tag has the following properties:
 
 | Name | Type | Description |
 | --- | --- | --- |
