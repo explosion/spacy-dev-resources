@@ -1,6 +1,6 @@
 <a href="https://explosion.ai"><img src="https://explosion.ai/assets/img/logo.svg" width="125" height="125" align="right" /></a>
 
-# displaCy ENT server (trainable)
+# spaCy annotator – a trainable displaCy ENT server
 **by [@tcrossland](https://github.com/tcrossland)**
 
 This directory contains a customized version of the [displaCy REST microservice](https://github.com/explosion/spacy-services) which includes an endpoint for training the named entity recognition of a model.

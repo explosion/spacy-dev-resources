@@ -10,6 +10,7 @@ This repository is a collection of community resources and contains scripts, too
 | --- | --- |
 | [`corpus-utils`](corpus-utils) | Scripts used to transform treebanks. *Work in progress*. |
 | [`fabfile`](fabfile) | Utility commands to be used with [Fabric](http://www.fabfile.org). |
+| [`spacy-annotator`](spacy-annotator) | Trainable server for named entities that can be connected to a front-end, by [@tcrossland](https://github.com/tcrossland) |
 | [`templates`](templates) | Template files for adding spaCy extensions, like new languages. |
 | [`training`](training) | Scripts and services for producing spaCy models. |
 
