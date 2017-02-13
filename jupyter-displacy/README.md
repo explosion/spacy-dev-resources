@@ -58,6 +58,18 @@ You can override the following settings in your notebook meta data:
 }
 ```
 
+| Setting | Description | Default |
+| --- | --- | --- |
+| **distance** | distance between words in px | `200` |
+| **offsetX** | spacing on left side of the SVG in px | `50` |
+| **arrowSpacing** | spacing between arrows in px to avoid overlaps | `20` |
+| **arrowWidth** | width of arrow head in px | `10` |
+| **arrowStroke** | width of arc in px | `2` |
+| **wordSpacing** | spacing between words and arcs in px | `75` |
+| **font** | font face for all text | `'inherit'` |
+| **color** | text color, HEX, RGB or color names | `'#000000'` |
+| **bg** | background color, HEX, RGB or color names | `'#ffffff'` |
+
 For example:
 
 ```json
