@@ -11,14 +11,14 @@ Simple extension for [Jupyter](http://jupyter.org/) (formerly iPython) Notebook 
 ```json
 {
     "arcs": [
-        {"dir":"left", "end":1, "label":"nsubj", "start":0},
-        {"dir":"right", "end":2, "label":"acomp", "start":1}
+        {"dir": "left", "end": 1, "label": "nsubj", "start": 0},
+        {"dir": "right", "end": 2, "label": "acomp", "start": 1}
     ],
 
     "words": [
-        {"tag":"NNP", "text":"Jupyter"},
-        {"tag":"VBZ", "text":"is"},
-        {"tag":"JJ", "text":"cool"}
+        {"tag": "NNP", "text": "Jupyter"},
+        {"tag": "VBZ", "text": "is"},
+        {"tag": "JJ", "text": "cool"}
     ]
 }
 ```
