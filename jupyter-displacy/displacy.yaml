@@ -1,0 +1,7 @@
+Type: IPython Notebook Extension
+Name: displacy
+Description: Visualize a JSON-formatted dependency parse using the displaCy NLP Visualizer
+Icon: displacy.png
+Main: displacy.js
+Compatibility: 4.x
+Link: README.md
