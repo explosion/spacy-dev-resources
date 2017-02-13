@@ -1,7 +1,7 @@
 <a href="https://explosion.ai"><img src="https://explosion.ai/assets/img/logo.svg" width="125" height="125" align="right" /></a>
 
 # displaCy Jupyter extension
-** by [@ines](https://github.com/ines)**
+**by [@ines](https://github.com/ines)**
 
 Simple extension for [Jupyter](http://jupyter.org/) (formerly iPython) Notebook that lets you visualize a JSON-formatted dependency parse using the [displaCy visualizer](https://github.com/explosion/displacy).
 
@@ -24,6 +24,18 @@ Simple extension for [Jupyter](http://jupyter.org/) (formerly iPython) Notebook 
 ```
 
 To render the visualization, select the cell containing the parse and click the magic wand button in your toolbar.
+
+## Installation
+
+The extension can be installed straight from GitHub:
+
+```bash
+jupyter nbextension install https://github.com/explosion/spacy-dev-resources/tree/master/jupyter-displacy
+jupyter nbextension enable displacy
+
+# run notebook server
+jupyter notebook
+```
 
 ## Configuration
 
