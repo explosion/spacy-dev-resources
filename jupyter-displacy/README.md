@@ -30,6 +30,7 @@ To render the visualization, select the cell containing the parse and click the 
 The extension can be installed straight from GitHub:
 
 ```bash
+# install and enable extension
 jupyter nbextension install https://github.com/explosion/spacy-dev-resources/tree/master/jupyter-displacy
 jupyter nbextension enable displacy
 
