@@ -2,3 +2,4 @@ falcon
 spacy
 pytest
 gunicorn
+falcon_cors
