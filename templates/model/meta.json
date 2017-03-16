@@ -1,0 +1,11 @@
+{
+    "name": "model_name",
+    "lang": "en",
+    "version": "0.0.0",
+    "spacy_version": ">=1.7.0,<2.0.0",
+    "description": "Description of the model here",
+    "author": "Explosion AI",
+    "email": "contact@explosion.ai",
+    "url": "https://explosion.ai",
+    "license": "MIT"
+}
