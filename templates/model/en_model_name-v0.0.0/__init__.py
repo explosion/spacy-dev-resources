@@ -1,7 +1,6 @@
 from pathlib import Path
 from spacy.util import get_lang_class
 import pkg_resources
-from . import about
 
 
 def load_meta():
