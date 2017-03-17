@@ -10,7 +10,7 @@ def load_meta():
 
 
 def load(**kwargs):
-    version = load_meta()
+    meta = load_meta()
     version = meta['version']
     data_dir = pkg_resources.resource_filename(__name__, __name__ + '-' + version)
     lang = get_lang_class(meta['lang'])
