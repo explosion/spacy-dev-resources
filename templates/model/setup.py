@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 import io
 import json
 from os import path, walk
+from os.path import dirname
 from shutil import copy
 from setuptools import setup
 
@@ -22,12 +23,12 @@ def generate_about(fp, data):
 
 
 def list_files(data_dir):
-    paths = []
+    output = []
     for root, _, filenames in walk(data_dir):
         for filename in filenames:
             if not filename.startswith('.'):
-                paths.append(path.join(root, filename))
-    output = [p.split('/', 1)[1] for p in paths]
+                output.append(path.join(root, filename))
+    output = [path.relpath(p, dirname(data_dir)) for p in output]
     output.append('meta.json')
     return output
 
