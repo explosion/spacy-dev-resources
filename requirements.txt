@@ -3,6 +3,7 @@ cryptography==1.7.1
 enum34==1.1.6
 Fabric==1.13.1
 fabtools==0.20.0
+gensim==1.0.1
 idna==2.2
 ipaddress==1.0.18
 paramiko==2.1.1

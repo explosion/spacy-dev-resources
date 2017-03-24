@@ -63,30 +63,39 @@ def wiki_model(language, env=None):
     word2vec_model_path = join(model_dir, "{}_wiki.word2vec".format(language))
     brown_out_dir = join(model_dir, "brown")
 
-    wikipedia.download(corpus_dir, out_file, language)
-    wikipedia.extract(env, dump_path, wiki_pages_dir, wiki_corpus_path, language)
+    # wikipedia.download(corpus_dir, out_file, language)
+    # wikipedia.extract(env, dump_path, wiki_pages_dir, wiki_corpus_path, language)
 
-    word_counts(wiki_corpus_path + "/*", word_freq_path)
-    word2vec(wiki_corpus_path, word2vec_model_path)
-    brown_clusters(wiki_corpus_path, brown_out_dir)
+    # word_counts(wiki_pages_dir + "/*", word_freq_path)
+    word2vec(wiki_pages_dir, word2vec_model_path, language)
+    # brown_clusters(wiki_corpus_path, brown_out_dir)
 
 
 @task
-def word2vec(corpus_path, out_path, dim=300, threads=4):
+def word2vec(corpus_path, out_path, language, dim=300, threads=4):
     local("mkdir -p {}".format(dirname(out_path)))
+    # local(
+    #     "python -m gensim.scripts.word2vec_standalone -train {corpus_file} -output {file} -size {dim} -threads {threads}".format(
+    #         corpus_file=corpus_path,
+    #         dim=dim,
+    #         file=out_path,
+    #         threads=threads
+    #     )
+    # )
     local(
-        "python -m gensim.scripts.word2vec_standalone -train {corpus_file} -output {file} -size {dim} -threads {threads}".format(
-            corpus_file=corpus_path,
+        "python training/word_vectors.py {lang} {in_dir} {out_file} -n {threads} -d {dim}".format(
             dim=dim,
-            file=out_path,
-            threads=threads
+            in_dir=corpus_path,
+            out_file=out_path,
+            threads=threads,
+            lang=language,
         )
     )
 
 
 @task
 def word_counts(input_glob, out_path):
-    local("python training/plain_word_freqs.py {inp_glob} {out}".format(input_glob=input_glob, out=out_path))
+    local("python training/plain_word_freqs.py \"{input_glob}\" {out}".format(input_glob=input_glob, out=out_path))
 
 
 @task
