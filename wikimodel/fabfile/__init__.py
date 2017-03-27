@@ -63,13 +63,13 @@ def wiki_model(language, env=None):
     word2vec_model_path = join(model_dir, "{}_wiki.word2vec".format(language))
     brown_out_dir = join(model_dir, "brown")
 
-    # wikipedia.download(corpus_dir, out_file, language)
-    # wikipedia.extract(env, dump_path, wiki_pages_dir, wiki_corpus_path, language)
-    #
-    # word_counts(wiki_pages_dir + "/*", word_freq_path)
-    # # word2vec(wiki_pages_dir, word2vec_model_path, language)
-    # word2vec(wiki_corpus_path, word2vec_model_path, language)
-    # brown_clusters(wiki_corpus_path, brown_out_dir)
+    wikipedia.download(corpus_dir, out_file, language)
+    wikipedia.extract(env, dump_path, wiki_pages_dir, wiki_corpus_path, language)
+
+    word_counts(wiki_pages_dir + "/*", word_freq_path)
+    # word2vec(wiki_pages_dir, word2vec_model_path, language)
+    word2vec(wiki_corpus_path, word2vec_model_path, language)
+    brown_clusters(wiki_corpus_path, brown_out_dir)
     local(
         "python training/init.py {lang} ./{dir}/vocab {freq} {brown}/paths {w2v}.bz2".format(
             lang=language,
