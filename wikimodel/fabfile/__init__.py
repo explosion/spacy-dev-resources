@@ -55,7 +55,7 @@ def wiki_model(language, env=None):
     corpus_dir = CORPUS_DIR.format(lang=language)
     out_file = "{}_wiki.xml.bz2".format(language)
     dump_path = join(corpus_dir, out_file)
-    wiki_corpus_path = join(corpus_dir, "{}_wiki.corpus".format(language))
+    wiki_corpus_path = join(corpus_dir, "{}_wiki.fabfile".format(language))
     wiki_pages_dir = join(corpus_dir, "wiki")
     model_dir = MODEL_DIR.format(lang=language)
 
@@ -65,32 +65,43 @@ def wiki_model(language, env=None):
 
     # wikipedia.download(corpus_dir, out_file, language)
     # wikipedia.extract(env, dump_path, wiki_pages_dir, wiki_corpus_path, language)
-
+    #
     # word_counts(wiki_pages_dir + "/*", word_freq_path)
-    word2vec(wiki_pages_dir, word2vec_model_path, language)
+    # # word2vec(wiki_pages_dir, word2vec_model_path, language)
+    # word2vec(wiki_corpus_path, word2vec_model_path, language)
     # brown_clusters(wiki_corpus_path, brown_out_dir)
+    local(
+        "python training/init.py {lang} ./{dir}/vocab {freq} {brown}/paths {w2v}.bz2".format(
+            lang=language,
+            dir=model_dir,
+            freq=word_freq_path,
+            brown=brown_out_dir,
+            w2v=word2vec_model_path
+        ))
 
 
 @task
-def word2vec(corpus_path, out_path, language, dim=300, threads=4):
+def word2vec(corpus_path, out_path, language, dim=128, threads=4, min_count=5):
     local("mkdir -p {}".format(dirname(out_path)))
-    # local(
-    #     "python -m gensim.scripts.word2vec_standalone -train {corpus_file} -output {file} -size {dim} -threads {threads}".format(
-    #         corpus_file=corpus_path,
-    #         dim=dim,
-    #         file=out_path,
-    #         threads=threads
-    #     )
-    # )
     local(
-        "python training/word_vectors.py {lang} {in_dir} {out_file} -n {threads} -d {dim}".format(
+        "python -m gensim.scripts.word2vec_standalone -train {corpus_file} -output {file} -size {dim} -threads {threads} -min_count {min}".format(
+            corpus_file=corpus_path,
             dim=dim,
-            in_dir=corpus_path,
-            out_file=out_path,
+            file=out_path,
             threads=threads,
-            lang=language,
+            min=min_count
         )
     )
+    local("bzip2 {}".format(out_path))
+    # local(
+    #     "python training/word_vectors.py {lang} {in_dir} {out_file} -n {threads} -d {dim}".format(
+    #         dim=dim,
+    #         in_dir=corpus_path,
+    #         out_file=out_path,
+    #         threads=threads,
+    #         lang=language,
+    #     )
+    # )
 
 
 @task
@@ -99,7 +110,7 @@ def word_counts(input_glob, out_path):
 
 
 @task
-def brown_clusters(corpus_path, output_dir, clusters=1000, threads=4):
+def brown_clusters(corpus_path, output_dir, clusters=2 ** 13, threads=4):
     local("mkdir -p {}".format(output_dir))
     brown_script = join(BROWN_DIR, "wcluster")
     local(

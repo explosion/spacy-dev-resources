@@ -29,7 +29,7 @@ def extract(venv, wiki_dump_path, wiki_pages_dir, corpus_path, lang):
         with optional_venv(venv, local=True):
             local("mkdir -p {}".format(wiki_pages_dir))
             local(
-                "python ./corpus-utils/wiki2txt.py {dump} {out} {lang}".format(dump=wiki_dump_path, out=wiki_pages_dir,
+                "python ./fabfile-utils/wiki2txt.py {dump} {out} {lang}".format(dump=wiki_dump_path, out=wiki_pages_dir,
                                                                                lang=lang))
             local(
                 "find {path} -name '*.txt' | xargs cat > {out_file}".format(path=wiki_pages_dir, out_file=corpus_path))
