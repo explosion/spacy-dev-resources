@@ -59,6 +59,9 @@ def wiki_model(language, env=None):
     wiki_pages_dir = join(corpus_dir, "wiki")
     model_dir = MODEL_DIR.format(lang=language)
 
+    local("mkdir -p {}".format(corpus_dir))
+    local("mkdir -p {}".format(model_dir))
+
     word_freq_path = join(model_dir, "{}_wiki.freqs".format(language))
     word2vec_model_path = join(model_dir, "{}_wiki.word2vec".format(language))
     brown_out_dir = join(model_dir, "brown")
