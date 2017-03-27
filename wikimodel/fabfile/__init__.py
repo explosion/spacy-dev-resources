@@ -84,7 +84,8 @@ def wiki_model(language, env=None):
 def word2vec(corpus_path, out_path, language, dim=128, threads=4, min_count=5):
     local("mkdir -p {}".format(dirname(out_path)))
     local(
-        "python -m gensim.scripts.word2vec_standalone -train {corpus_file} -output {file} -size {dim} -threads {threads} -min_count {min}".format(
+        "python -m gensim.scripts.word2vec_standalone " +
+        "-train {corpus_file} -output {file} -size {dim} -threads {threads} -min_count {min} 2>&1 > {file}.log".format(
             corpus_file=corpus_path,
             dim=dim,
             file=out_path,
