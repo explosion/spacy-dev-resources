@@ -55,7 +55,7 @@ def wiki_model(language, env=None):
     corpus_dir = CORPUS_DIR.format(lang=language)
     out_file = "{}_wiki.xml.bz2".format(language)
     dump_path = join(corpus_dir, out_file)
-    wiki_corpus_path = join(corpus_dir, "{}_wiki.fabfile".format(language))
+    wiki_corpus_path = join(corpus_dir, "{}_wiki.corpus".format(language))
     wiki_pages_dir = join(corpus_dir, "wiki")
     model_dir = MODEL_DIR.format(lang=language)
 
