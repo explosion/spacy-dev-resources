@@ -12,4 +12,6 @@ To create vocabulary files from Wikipeda run the following command from the root
 
 In case you already have a corpus, you can also build a vocabulary using your data by running
 
-`fab -f vocab/fabfile build_vocab:<language>,<corpus_files_root>` (where `corpus_files_root` directory contains plain text files)
+`fab -f vocab/fabfile build_vocab:<lang>,<corpus_files_root>` (where `corpus_files_root` directory contains plain text files)
+
+Your vocabulary is placed in `./data/model/<lang>/vocab`
