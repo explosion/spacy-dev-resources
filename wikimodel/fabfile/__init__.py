@@ -34,7 +34,7 @@ def clean():
 
 
 @task
-def build_brown(path=BROWN_DIR):
+def install_brown(path=BROWN_DIR):
     local("mkdir -p {}".format(path))
     local("git clone git@github.com:percyliang/brown-cluster.git ./{}".format(path))
     with lcd(path):
@@ -42,37 +42,45 @@ def build_brown(path=BROWN_DIR):
 
 
 @task
-def env(env_dir=None):
+def install_dep(env_dir=None):
     if env_dir is not None:
         local("virtualenv {}".format(env_dir))
     with optional_venv(env_dir, local=True):
         local("pip install textacy==0.3.2 plac==0.9.6 spacy==1.6 gensim==0.13.4 tqdm")
-    build_brown()
+    install_brown()
 
 
 @task
-def wiki_model(language, env=None):
+def build_wiki_vocab(language, env=None):
     corpus_dir = CORPUS_DIR.format(lang=language)
-    out_file = "{}_wiki.xml.bz2".format(language)
-    dump_path = join(corpus_dir, out_file)
-    wiki_corpus_path = join(corpus_dir, "{}_wiki.corpus".format(language))
-    wiki_pages_dir = join(corpus_dir, "wiki")
-    model_dir = MODEL_DIR.format(lang=language)
-
     local("mkdir -p {}".format(corpus_dir))
-    local("mkdir -p {}".format(model_dir))
 
-    word_freq_path = join(model_dir, "{}_wiki.freqs".format(language))
-    word2vec_model_path = join(model_dir, "{}_wiki.word2vec".format(language))
-    brown_out_dir = join(model_dir, "brown")
-
+    out_file = "{}_wiki.xml.bz2".format(language)
     wikipedia.download(corpus_dir, out_file, language)
-    wikipedia.extract(env, dump_path, wiki_pages_dir, wiki_corpus_path, language)
 
-    word_counts(wiki_pages_dir + "/*", word_freq_path)
-    # word2vec(wiki_pages_dir, word2vec_model_path, language)
-    word2vec(wiki_corpus_path, word2vec_model_path, language)
-    brown_clusters(wiki_corpus_path, brown_out_dir)
+    dump_path = join(corpus_dir, out_file)
+    corpus_files_root = join(corpus_dir, "wiki")
+    wikipedia.extract(env, dump_path, corpus_files_root, language)
+
+    build_vocab(corpus_dir, corpus_files_root, language)
+
+
+@task
+def build_vocab(corpus_dir, corpus_files_root, language):
+    model_dir = MODEL_DIR.format(lang=language)
+    local("mkdir -p {}".format(model_dir))
+    unified_corpus_path = join(corpus_dir, "{}_wiki.corpus".format(language))
+    merge_corpus(corpus_files_root, unified_corpus_path)
+    word_freq_path = join(model_dir, "{}_wiki.freqs".format(language))
+    word_counts(corpus_files_root + "/*", word_freq_path)
+    word2vec_model_path = join(model_dir, "{}_wiki.word2vec".format(language))
+    word2vec(unified_corpus_path, word2vec_model_path, language)
+    brown_out_dir = join(model_dir, "brown")
+    brown_clusters(unified_corpus_path, brown_out_dir)
+    init_vocab(language, model_dir, word_freq_path, word2vec_model_path, brown_out_dir)
+
+
+def init_vocab(language, model_dir, word_freq_path, word2vec_model_path, brown_out_dir):
     local(
         "python training/init.py {lang} ./{dir}/vocab {freq} {brown}/paths {w2v}.bz2".format(
             lang=language,
@@ -83,7 +91,13 @@ def wiki_model(language, env=None):
         ))
 
 
-@task
+def merge_corpus(corpus_files_root, unified_corpus_path):
+    local(
+        "find {path} -name '*.txt' | xargs cat > {out_file}".format(
+            path=corpus_files_root, out_file=unified_corpus_path
+        ))
+
+
 def word2vec(corpus_path, out_path, language, dim=128, threads=4, min_count=5):
     local("mkdir -p {}".format(dirname(out_path)))
     local(
@@ -108,12 +122,10 @@ def word2vec(corpus_path, out_path, language, dim=128, threads=4, min_count=5):
     # )
 
 
-@task
 def word_counts(input_glob, out_path):
     local("python training/plain_word_freqs.py \"{input_glob}\" {out}".format(input_glob=input_glob, out=out_path))
 
 
-@task
 def brown_clusters(corpus_path, output_dir, clusters=2 ** 13, threads=4):
     local("mkdir -p {}".format(output_dir))
     brown_script = join(BROWN_DIR, "wcluster")
