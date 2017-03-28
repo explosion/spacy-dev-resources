@@ -110,7 +110,7 @@ def word2vec(corpus_path, out_path, dim=128, threads=4, min_count=5):
     local("mkdir -p {}".format(dirname(out_path)))
     local(
         "python -m gensim.scripts.word2vec_standalone " +
-        "-train {corpus_file} -output {file} -size {dim} -threads {threads} -min_count {min} &> {file}.log".format(
+        "-train {corpus_file} -output {file} -size {dim} -threads {threads} -min_count {min}".format(
             corpus_file=corpus_path,
             dim=dim,
             file=out_path,
@@ -118,7 +118,7 @@ def word2vec(corpus_path, out_path, dim=128, threads=4, min_count=5):
             min=min_count
         )
     )
-    local("bzip2 {}".format(out_path))
+    local("bzip2 {}".format(out_path), capture=True)
     # local(
     #     "python training/word_vectors.py {lang} {in_dir} {out_file} -n {threads} -d {dim}".format(
     #         dim=dim,
