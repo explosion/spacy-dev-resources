@@ -62,7 +62,7 @@ def build_wiki_vocab(language, env=None):
     corpus_files_root = join(corpus_dir, "wiki")
     wikipedia.extract(env, dump_path, corpus_files_root, language)
 
-    build_vocab(language, corpus_dir, corpus_files_root)
+    build_vocab(language, corpus_files_root)
 
 
 @task
