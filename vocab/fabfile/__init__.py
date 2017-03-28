@@ -46,7 +46,7 @@ def install_dep(env_dir=None):
     if env_dir is not None:
         local("virtualenv {}".format(env_dir))
     with optional_venv(env_dir, local=True):
-        local("pip install textacy==0.3.2 plac==0.9.6 spacy==1.6 gensim==0.13.4 tqdm")
+        local("pip install textacy==0.3.2 plac==0.9.6 spacy gensim==1.0.1 tqdm")
     install_brown()
 
 
