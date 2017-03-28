@@ -73,16 +73,17 @@ def build_vocab(language, corpus_files_root):
     model_dir = MODEL_DIR.format(lang=language)
     local("mkdir -p {}".format(model_dir))
 
-    unified_corpus_path = join(corpus_dir, "{}_wiki.corpus".format(language))
-    merge_corpus(corpus_files_root, unified_corpus_path)
+    corpus_file = join(corpus_dir, "{}_wiki.corpus".format(language))
+    merge_corpus(corpus_files_root, corpus_file)
+
     word_freq_path = join(model_dir, "{}_wiki.freqs".format(language))
     word_counts(corpus_files_root + "/*", word_freq_path)
 
     word2vec_model_path = join(model_dir, "{}_wiki.word2vec".format(language))
-    word2vec(unified_corpus_path, word2vec_model_path, language)
+    word2vec(corpus_file, word2vec_model_path)
 
     brown_out_dir = join(model_dir, "brown")
-    brown_clusters(unified_corpus_path, brown_out_dir)
+    brown_clusters(corpus_file, brown_out_dir)
 
     init_vocab(language, model_dir, word_freq_path, word2vec_model_path, brown_out_dir)
 
@@ -105,11 +106,11 @@ def merge_corpus(corpus_files_root, unified_corpus_path):
         ))
 
 
-def word2vec(corpus_path, out_path, language, dim=128, threads=4, min_count=5):
+def word2vec(corpus_path, out_path, dim=128, threads=4, min_count=5):
     local("mkdir -p {}".format(dirname(out_path)))
     local(
         "python -m gensim.scripts.word2vec_standalone " +
-        "-train {corpus_file} -output {file} -size {dim} -threads {threads} -min_count {min} 2>&1 > {file}.log".format(
+        "-train {corpus_file} -output {file} -size {dim} -threads {threads} -min_count {min} &> {file}.log".format(
             corpus_file=corpus_path,
             dim=dim,
             file=out_path,
