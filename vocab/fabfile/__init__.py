@@ -62,21 +62,28 @@ def build_wiki_vocab(language, env=None):
     corpus_files_root = join(corpus_dir, "wiki")
     wikipedia.extract(env, dump_path, corpus_files_root, language)
 
-    build_vocab(corpus_dir, corpus_files_root, language)
+    build_vocab(language, corpus_dir, corpus_files_root)
 
 
 @task
-def build_vocab(corpus_dir, corpus_files_root, language):
+def build_vocab(language, corpus_files_root):
+    corpus_dir = CORPUS_DIR.format(lang=language)
+    local("mkdir -p {}".format(corpus_dir))
+
     model_dir = MODEL_DIR.format(lang=language)
     local("mkdir -p {}".format(model_dir))
+
     unified_corpus_path = join(corpus_dir, "{}_wiki.corpus".format(language))
     merge_corpus(corpus_files_root, unified_corpus_path)
     word_freq_path = join(model_dir, "{}_wiki.freqs".format(language))
     word_counts(corpus_files_root + "/*", word_freq_path)
+
     word2vec_model_path = join(model_dir, "{}_wiki.word2vec".format(language))
     word2vec(unified_corpus_path, word2vec_model_path, language)
+
     brown_out_dir = join(model_dir, "brown")
     brown_clusters(unified_corpus_path, brown_out_dir)
+
     init_vocab(language, model_dir, word_freq_path, word2vec_model_path, brown_out_dir)
 
 
