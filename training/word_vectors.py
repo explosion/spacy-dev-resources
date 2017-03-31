@@ -82,7 +82,7 @@ def main(lang, in_dir, out_loc, negative=5, n_workers=4, window=5, size=128, min
                     text_no, total_words, len(corpus.strings))
     model.corpus_count = total_sents
     model.raw_vocab = defaultdict(int)
-    for orth, freq in corpus.counts.items():
+    for orth, freq in corpus.counts:
         if freq >= min_count:
             model.raw_vocab[nlp.vocab.strings[orth]] = freq
     model.scale_vocab()
