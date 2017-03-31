@@ -14,4 +14,4 @@ In case you already have a corpus, you can also build a vocabulary using your da
 
 `fab -f vocab/fabfile build_vocab:<lang>,<corpus_files_root>` (where `corpus_files_root` directory contains plain text files)
 
-Your vocabulary is placed in `./data/model/<lang>/vocab`
+Your vocabulary is placed at `./data/model/<lang>/vocab`, now you can build your language model using [spaCy's CLI](https://spacy.io/docs/usage/cli#package)

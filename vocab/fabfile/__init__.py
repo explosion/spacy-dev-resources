@@ -106,7 +106,7 @@ def merge_corpus(corpus_files_root, unified_corpus_path):
         ))
 
 
-def word2vec(corpus_path, out_path, dim=150, threads=4, min_count=10, cbow=1):
+def word2vec(corpus_path, out_path, dim=150, threads=4, min_count=10, cbow=0):
     local("mkdir -p {}".format(dirname(out_path)))
     local(
         "python -m gensim.scripts.word2vec_standalone " +
