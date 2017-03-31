@@ -106,16 +106,17 @@ def merge_corpus(corpus_files_root, unified_corpus_path):
         ))
 
 
-def word2vec(corpus_path, out_path, dim=128, threads=4, min_count=5):
+def word2vec(corpus_path, out_path, dim=150, threads=4, min_count=10, cbow=1):
     local("mkdir -p {}".format(dirname(out_path)))
     local(
         "python -m gensim.scripts.word2vec_standalone " +
-        "-train {corpus_file} -output {file} -size {dim} -threads {threads} -min_count {min}".format(
+        "-train {corpus_file} -output {file} -size {dim} -threads {threads} -min_count {min} -cbow {cbow}".format(
             corpus_file=corpus_path,
             dim=dim,
             file=out_path,
             threads=threads,
-            min=min_count
+            min=min_count,
+            cbow=cbow
         )
     )
     local("bzip2 {}".format(out_path), capture=True)
@@ -134,7 +135,7 @@ def word_counts(input_glob, out_path):
     local("python training/plain_word_freqs.py \"{input_glob}\" {out}".format(input_glob=input_glob, out=out_path))
 
 
-def brown_clusters(corpus_path, output_dir, clusters=2 ** 13, threads=4):
+def brown_clusters(corpus_path, output_dir, clusters=2 ** 10, threads=4):
     local("mkdir -p {}".format(output_dir))
     brown_script = join(BROWN_DIR, "wcluster")
     local(
