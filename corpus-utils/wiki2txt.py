@@ -37,10 +37,7 @@ def clean_lines(txt, min_char_ratio=0.9, min_length=50):
 
 
 def pre_filter(content):
-    # if len(content) > 10 ** 4:
     return "\n".join([line for line in content.split(u"\n") if not TABLE_PREFIX.match(line)])
-    # else:
-    #     return content
 
 
 def extract_text(content, nlp, cleaned):
@@ -64,12 +61,9 @@ def main(dump_path, out_dir, lang, cleaned=True):
     reader = WikiReader(dump_path)
     nlp = spacy.load(lang, parser=None, tagger=None)
     for id, title, content in tqdm(reader):
-        # if int(id) < 1338877:
-        #     continue
         text_content = extract_text(content, nlp, cleaned)
         if text_content:
             write_file(id, out_dir, text_content, title)
-            # break
 
 
 if __name__ == "__main__":
