@@ -90,7 +90,7 @@ def build_vocab(language, corpus_files_root):
 
 def init_vocab(language, model_dir, word_freq_path, word2vec_model_path, brown_out_dir):
     local(
-        "python training/init.py {lang} ./{dir}/vocab {freq} {brown}/paths {w2v}.bz2".format(
+        "python -m spacy model {lang} ./{dir}/vocab {freq} {brown}/paths {w2v}.bz2".format(
             lang=language,
             dir=model_dir,
             freq=word_freq_path,
