@@ -14,6 +14,7 @@ This repository is a collection of community resources and contains scripts, too
 | [`spacy-annotator`](spacy-annotator) | Trainable server for named entities that can be connected to a front-end, by [@tcrossland](https://github.com/tcrossland) |
 | [`templates`](templates) | Template files for adding spaCy extensions, like new languages. |
 | [`training`](training) | Scripts and services for producing spaCy models. |
+| [`vocab`](vocab) | [Fabric](http://www.fabfile.org) scripts for creating vocabulary, Brown clusters and word vectors from a Wikipedia and other corpora. |
 
 ## Contributing to spaCy
 

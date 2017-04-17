@@ -115,9 +115,9 @@ def populate_vocab(vocab, clusters, probs, oov_prob):
 
 def write_vectors(src_dir, dst_dir):
     print('Reading vocab from ', src_dir)
-    vectors_src = src_dir / 'vectors.bz2'
+    vectors_src = src_dir #/ 'vectors.bz2'
     if vectors_src.exists():
-        write_binary_vectors(vectors_src.as_posix(), (dst_dir / 'vec.bin').as_posix())
+        write_binary_vectors(vectors_src.as_posix(), (dst_dir / 'vocab' / 'vec.bin').as_posix())
     else:
         print("Warning: Word vectors file not found")
 
