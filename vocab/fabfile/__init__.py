@@ -36,7 +36,7 @@ def clean():
 @task
 def install_brown(path=BROWN_DIR):
     local("mkdir -p {}".format(path))
-    local("git clone git@github.com:percyliang/brown-cluster.git ./{}".format(path))
+    local("git clone https://github.com/percyliang/brown-cluster.git ./{}".format(path))
     with lcd(path):
         local("make")
 

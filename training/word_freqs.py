@@ -4,19 +4,19 @@ from __future__ import unicode_literals, print_function
 
 import plac
 import joblib
-from os import path
 import os
 import bz2
 import ujson
 from preshed.counter import PreshCounter
 from joblib import Parallel, delayed
-import io
+from pathlib import Path
 
 from spacy.en import English
 from spacy.strings import StringStore
 from spacy.attrs import ORTH
 from spacy.tokenizer import Tokenizer
 from spacy.vocab import Vocab
+import spacy.util
 
 
 def iter_comments(loc):
@@ -25,11 +25,9 @@ def iter_comments(loc):
             yield ujson.loads(line)
 
 
-def count_freqs(input_loc, output_loc):
+def count_freqs(Language, input_loc, output_loc):
     print(output_loc)
-    vocab = English.default_vocab(get_lex_attr=None)
-    tokenizer = Tokenizer.from_dir(vocab,
-                    path.join(English.default_data_dir(), 'tokenizer'))
+    tokenizer = Language.Defaults.create_tokenizer()
 
     counts = PreshCounter()
     for json_comment in iter_comments(input_loc):
@@ -63,24 +61,26 @@ def merge_counts(locs, out_loc):
 
 
 @plac.annotations(
-    input_loc=("Location of input file list"),
-    freqs_dir=("Directory for frequency files"),
-    output_loc=("Location for output file"),
+    lang=("Language to tokenize", "positional"),
+    input_loc=("Location of input file list", "positional", None, Path),
+    freqs_dir=("Directory for frequency files", "positional", None, Path),
+    output_loc=("Location for output file", "positional", None, Path),
     n_jobs=("Number of workers", "option", "n", int),
     skip_existing=("Skip inputs where an output file exists", "flag", "s", bool),
 )
-def main(input_loc, freqs_dir, output_loc, n_jobs=2, skip_existing=False):
+def main(lang, input_loc, freqs_dir, output_loc, n_jobs=2, skip_existing=False):
+    Language = spacy.util.get_lang_class(lang)
     tasks = []
     outputs = []
-    for input_path in open(input_loc):
-        input_path = input_path.strip()
+    for input_path in input_loc.open():
+        input_path = Path(input_path.strip())
         if not input_path:
             continue
-        filename = input_path.split('/')[-1]
-        output_path = path.join(freqs_dir, filename.replace('bz2', 'freq'))
+        filename = input_path.parts[-1]
+        output_path = freqs_dir / filename.replace('bz2', 'freq')
         outputs.append(output_path)
-        if not path.exists(output_path) or not skip_existing:
-            tasks.append((input_path, output_path))
+        if not output_path.exists() or not skip_existing:
+            tasks.append((Language, input_path, output_path))
 
     if tasks:
         parallelize(count_freqs, tasks, n_jobs)
