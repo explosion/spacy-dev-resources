@@ -4,6 +4,7 @@ import codecs
 import re
 from os.path import join
 
+import ftfy
 import plac
 import spacy
 from textacy.corpora.wiki_reader import WikiReader, strip_markup
@@ -28,6 +29,7 @@ def tokenize_sentence_split(text, nlp):
 
 
 def clean_lines(txt, min_char_ratio=0.9, min_length=50):
+    txt = ftfy.fix_text(txt)
     for line in txt.split(u"\n"):
         line = TAG.sub(u"", line.strip())
         if line and line[0].isalnum() and len(line) > min_length:
