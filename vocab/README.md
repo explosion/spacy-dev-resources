@@ -20,7 +20,7 @@ Your vocabulary is placed at `./data/model/<lang>/vocab`, now you can build your
 
 First, create a spaCy model:
 
-`python -m spacy model <lang> ./data/model/nu/spacy_model ./data/model/<lang>/<lang>_wiki.freqs ./data/model/<lang>/brown/paths ./data/model/<lang>/<lang>_wiki.word2vec.bz2`
+`python -m spacy model <lang> ./data/model/<lang>/spacy_model ./data/model/<lang>/<lang>_wiki.freqs ./data/model/<lang>/brown/paths ./data/model/<lang>/<lang>_wiki.word2vec.bz2`
 
 Then, package it:
 
