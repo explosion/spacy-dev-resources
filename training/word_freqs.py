@@ -5,6 +5,7 @@ from __future__ import unicode_literals, print_function
 import plac
 import joblib
 import os
+import io
 import bz2
 import ujson
 from preshed.counter import PreshCounter
