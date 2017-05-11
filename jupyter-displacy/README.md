@@ -30,8 +30,18 @@ To render the visualization, select the cell containing the parse and click the 
 The extension can be installed straight from GitHub:
 
 ```bash
-# install and enable extension
 jupyter nbextension install https://github.com/explosion/spacy-dev-resources/tree/master/jupyter-displacy
+```
+
+In some cases, the above command was causing problems. If that's the case for you, try installing the JavaScript file directly:
+
+```bash
+jupyter nbextension install https://raw.githubusercontent.com/explosion/spacy-dev-resources/master/jupyter-displacy/displacy.js
+```
+
+You can now enable the extension and run the notebook server:
+
+```bash
 jupyter nbextension enable displacy
 
 # run notebook server
