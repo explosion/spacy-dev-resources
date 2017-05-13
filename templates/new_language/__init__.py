@@ -9,6 +9,10 @@ from .lex_attrs import LEX_ATTRS
 # from .tag_map import TAG_MAP
 # from .morph_rules import MORPH_RULES
 
+# uncomment if lookup-based lemmatizer is available
+# from .lemmatizer import LOOKUP
+# from ...lemmatizerlookup import Lemmatizer
+
 from ..tokenizer_exceptions import BASE_EXCEPTIONS
 from ...language import Language
 from ...attrs import LANG
@@ -48,6 +52,11 @@ class Xxxxx(Language):
 
         # if available: add morph rules
         # morph_rules = dict(MORPH_RULES)
+
+        # if available: add lookup lemmatizer
+        # @classmethod
+        # def create_lemmatizer(cls, nlp=None):
+        #     return Lemmatizer(LOOKUP)
 
 
 # set default export – this allows the language class to be lazy-loaded
