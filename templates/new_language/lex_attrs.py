@@ -6,7 +6,7 @@ from ...attrs import LIKE_NUM
 
 
 # Overwriting functions for lexical attributes
-# Documentation: http://localhost:1234/docs/usage/adding-languages#lex-attrs
+# Documentation: https://localhost:1234/docs/usage/adding-languages#lex-attrs
 # Most of these functions, like is_lower or like_url should be language-
 # independent. Others, like like_num (which includes both digits and number
 # words), requires customisation.

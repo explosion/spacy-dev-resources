@@ -7,7 +7,7 @@ from ...deprecated import PRON_LEMMA
 
 
 # Add tokenizer exceptions
-# Documentation: http://spacy.io/docs/usage/adding-languages#tokenizer-exceptions
+# Documentation: https://spacy.io/docs/usage/adding-languages#tokenizer-exceptions
 # Feel free to use custom logic to generate repetitive exceptions more efficiently.
 # If an exception is split into more than one token, the ORTH values combined always
 # need to match the original string.

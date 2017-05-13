@@ -16,7 +16,7 @@ from ...util import update_exc
 
 
 # Create a Language subclass
-# Documentation: http://spacy.io/docs/usage/adding-languages
+# Documentation: https://spacy.io/docs/usage/adding-languages
 
 # This file should be placed in spacy/lang/xx (ISO code of language).
 # Before submitting a pull request, make sure the remove all comments from the
