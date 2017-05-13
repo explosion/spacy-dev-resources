@@ -6,7 +6,7 @@ from ..symbols import PUNCT, NUM, AUX, X, CONJ, ADJ, VERB, PART, SPACE, CCONJ
 
 
 # Add a tag map
-# Documentation: http://localhost:1234/docs/usage/adding-languages#tag-map
+# Documentation: http://spacy.io/docs/usage/adding-languages#tag-map
 # Universal Dependencies: http://universaldependencies.org/u/pos/all.html
 # The keys of the tag map should be strings in your tag set. The dictionary must
 # have an entry POS whose value is one of the Universal Dependencies tags.
