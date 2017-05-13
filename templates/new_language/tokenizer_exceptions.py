@@ -1,46 +1,27 @@
-# encoding: utf8
+# coding: utf8
 from __future__ import unicode_literals
 
-from ..symbols import *
-from ..language_data import PRON_LEMMA
+# import symbols – if you need to use more, add them here
+from ...symbols import ORTH, LEMMA, TAG, NORM, ADP, DET
+from ...deprecated import PRON_LEMMA
 
 
-TOKENIZER_EXCEPTIONS = {
-    "Jan.": [
-        {ORTH: "Jan.", LEMMA: "January"}
-    ]
+# Add tokenizer exceptions
+# Documentation: http://spacy.io/docs/usage/adding-languages#tokenizer-exceptions
+# Feel free to use custom logic to generate repetitive exceptions more efficiently.
+# If an exception is split into more than one token, the ORTH values combined always
+# need to match the original string.
+
+# Exceptions should be added in the following format:
+
+_exc = {
+    "don't": [
+        {ORTH: "do", LEMMA: "do"},
+        {ORTH: "n't", LEMMA: "not", TAG: "RB"}]
 }
 
 
-# exceptions mapped to a single token containing only ORTH property
-# example: {"string": [{ORTH: "string"}]}
-# converted using strings_to_exc() util
+# To keep things clean and readable, it's recommended to only declare the
+# TOKENIZER_EXCEPTIONS at the bottom:
 
-ORTH_ONLY = [
-    "a.",
-    "b.",
-    "c.",
-    "d.",
-    "e.",
-    "f.",
-    "g.",
-    "h.",
-    "i.",
-    "j.",
-    "k.",
-    "l.",
-    "m.",
-    "n.",
-    "o.",
-    "p.",
-    "q.",
-    "r.",
-    "s.",
-    "t.",
-    "u.",
-    "v.",
-    "w.",
-    "x.",
-    "y.",
-    "z."
-]
+TOKENIZER_EXCEPTIONS = dict(_exc)
