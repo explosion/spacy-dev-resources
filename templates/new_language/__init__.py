@@ -7,7 +7,7 @@ from .lex_attrs import LEX_ATTRS
 
 # uncomment if files are available
 # from .tag_map import TAG_MAP
-# from .morph_rules import MOpRPH_RULES
+# from .morph_rules import MORPH_RULES
 
 from ..tokenizer_exceptions import BASE_EXCEPTIONS
 from ...language import Language
