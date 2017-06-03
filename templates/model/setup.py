@@ -25,6 +25,13 @@ def list_files(data_dir):
     return output
 
 
+def list_requirements(meta):
+    requirements = ['spacy' + meta['spacy_version']]
+    if 'setup_requires' in meta:
+        requirements += meta['setup_requirements']
+    return requirements
+
+
 def setup_package():
     root = path.abspath(path.dirname(__file__))
     meta_path = path.join(root, 'meta.json')
@@ -45,7 +52,7 @@ def setup_package():
         license=meta['license'],
         packages=[model_name],
         package_data={model_name: list_files(model_dir)},
-        install_requires=['spacy' + meta['spacy_version']],
+        install_requires=list_requirements(meta),
         zip_safe=False,
     )
 
