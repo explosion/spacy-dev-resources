@@ -28,7 +28,7 @@ def list_files(data_dir):
 def list_requirements(meta):
     requirements = ['spacy' + meta['spacy_version']]
     if 'setup_requires' in meta:
-        requirements += meta['setup_requirements']
+        requirements += meta['setup_requires']
     return requirements
 
 
