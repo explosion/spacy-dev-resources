@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """Convert conluu files into JSON format for use with train cli.
 use_morphology parameter enables appending morphology to tags, which is
 useful for languages such as Spanish, where UD tags are not so rich.
