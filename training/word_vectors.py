@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from __future__ import print_function, unicode_literals, division
 import io
 import bz2

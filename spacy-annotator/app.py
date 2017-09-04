@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from displacy.server import APP, get_model
 
 # Pre-load English and German models

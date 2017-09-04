@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """Set up a model directory."""
 from __future__ import unicode_literals
 

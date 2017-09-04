@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """Convert OntoNotes into a json format.
 
 doc: {
