@@ -24,4 +24,4 @@ _exc = {
 # To keep things clean and readable, it's recommended to only declare the
 # TOKENIZER_EXCEPTIONS at the bottom:
 
-TOKENIZER_EXCEPTIONS = dict(_exc)
+TOKENIZER_EXCEPTIONS = _exc
