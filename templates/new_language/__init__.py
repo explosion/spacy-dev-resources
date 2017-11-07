@@ -46,7 +46,7 @@ class XxxxxDefaults(Language.Defaults):
     tokenizer_exceptions = update_exc(BASE_EXCEPTIONS, TOKENIZER_EXCEPTIONS)
 
     # add stop words
-    stop_words = set(STOP_WORDS)
+    stop_words = STOP_WORDS
 
     # if available: add tag map
     # tag_map = dict(TAG_MAP)
