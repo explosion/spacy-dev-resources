@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 
 # import symbols – if you need to use more, add them here
 from ...symbols import ORTH, LEMMA, TAG, NORM, ADP, DET
-from ...deprecated import PRON_LEMMA
 
 
 # Add tokenizer exceptions
