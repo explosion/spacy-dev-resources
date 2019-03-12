@@ -2,8 +2,9 @@
 
 # spaCy Developer Resources
 
-This repository is a collection of community resources and contains scripts, tools and helpers for developing [spaCy](https://github.com/explosion/spaCy), adding new languages and training new models. Feel free to submit a [pull request](https://github.com/explosion/spacy-dev-resources/pulls) to contribute.
+> ⚠️ This repository is outdated and has been archived. Instead of providing separate scripts, we've been focusing on [standardising our formats](https://github.com/explosion/spaCy/issues/2928), improving the [documentation](https://spacy.io) and updating the [core library](https://github.com/explosion/spaCy) to require fewer utilities.
 
+This repository is a collection of community resources and contains scripts, tools and helpers for developing [spaCy](https://github.com/explosion/spaCy), adding new languages and training new models.
 ## Table of contents
 
 | Directory | Description |
@@ -15,7 +16,3 @@ This repository is a collection of community resources and contains scripts, too
 | [`templates`](templates) | Template files for adding spaCy extensions, like new languages. |
 | [`training`](training) | Scripts and services for producing spaCy models. |
 | [`vocab`](vocab) | [Fabric](http://www.fabfile.org) scripts for creating vocabulary, Brown clusters and word vectors from a Wikipedia and other corpora. |
-
-## Contributing to spaCy
-
-We always appreciate [pull requests](https://github.com/explosion/spacy/pulls)! 🙌 For more info on how to contribute to the project, see [our contribution guidelines](https://github.com/explosion/spaCy/blob/master/CONTRIBUTING.md).
